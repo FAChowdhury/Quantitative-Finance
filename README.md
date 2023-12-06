@@ -1,5 +1,4 @@
 # Quantitative-Finance
-<br>
 
 <h2>Requirements</h2>
 <p>Add installation requirements here</p>
