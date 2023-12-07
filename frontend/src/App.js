@@ -4,6 +4,7 @@ function App() {
   return (
     <div>
       Front end is working!
+      HI!
     </div>
   );
 }
