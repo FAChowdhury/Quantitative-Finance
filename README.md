@@ -6,10 +6,9 @@
 <p>Run 'source venv/bin/activate' in the backend every time you work on the project</p>
 <p>Run 'pip3 install Flask' in the backend once</p>
 <p>Run 'npm install' in the frontend once</p>
+<p>Run 'pip3 install pandas' in the backend once</p>
 <p>To start the backend server, run 'python3 server.py' in the backend</p>
 <p>To start the frontend server, run 'npm start' in the backend</p>
-<br>
-<p>pip3 install pandas in backend</p>
 <br>
 <p>
   If you get errors with urllib3, do the following:
@@ -25,6 +24,12 @@
 
 <h4>API</h4>
 <p>Add API in a neat table here</p>
+
+|    Route   |  Method  |  Return  |
+|------------|----------|----------|
+| New Data 1 | Data 2   | Data 3   |
+| New Data 4 | Data 5   | Data 6   |
+
 
 <h3>Frontend</h3>
 <hr>
