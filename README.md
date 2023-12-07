@@ -1,7 +1,11 @@
 # Quantitative-Finance
 
 <h2>Requirements</h2>
+
 <p>Add installation requirements here</p>
+<p>Run 'source venv/bin/activate' in the backend every time you work on the project</p>
+<p>Run 'pip3 install Flask' in the backend once</p>
+<p>To start the server, run 'python3 server.py' in the backend</p>
 
 <h2>Specification</h2>
 
