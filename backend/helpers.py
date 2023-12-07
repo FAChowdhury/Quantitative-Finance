@@ -1,7 +1,6 @@
 import yfinance as yf
 from datetime import datetime, timedelta
 
-
 stocks = ['CBA.AX', 'WBC.AX', 'COL.AX', 'WOW.AX', 'ORG.AX', 
           'BHP.AX', 'CSL.AX', 'ANZ.AX', 'NAB.AX', 'FMG.AX']
 
