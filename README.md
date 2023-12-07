@@ -27,8 +27,8 @@
 
 |    Route   |  Method  |  Return  |
 |------------|----------|----------|
-| New Data 1 | Data 2   | Data 3   |
-| New Data 4 | Data 5   | Data 6   |
+| New Data 1 | Data 2   | {Stock, Last_Price, Change, Percentage_Change}  |
+
 
 
 <h3>Frontend</h3>
