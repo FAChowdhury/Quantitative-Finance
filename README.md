@@ -3,11 +3,11 @@
 <h2>Requirements</h2>
 
 <p>Add installation requirements here</p>
-<p>Run 'source venv/bin/activate' in the backend every time you work on the project</p>
 <p>Run 'pip3 install Flask' in the backend once</p>
 <p>Run 'npm install' in the frontend once</p>
 <p>Run 'pip3 install pandas' in the backend once</p>
-<p>To start the backend server, run 'python3 server.py' in the backend</p>
+<p>To start the backend server, run 'source venv/bin/activate' in the backend </p> 
+<p>Then run 'python3 server.py' in the backend</p>
 <p>To start the frontend server, run 'npm start' in the backend</p>
 <br>
 <p>
