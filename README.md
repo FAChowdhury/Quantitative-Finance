@@ -27,7 +27,7 @@
 
 |    Route   |  Method  |  Return  |
 |------------|----------|----------|
-| New Data 1 | Data 2   | {Stock, Last_Price, Change, Percentage_Change}  |
+| /summary/<stock> |   GET    | {Stock, Last_Price, Change, Percentage_Change}  |
 
 
 
