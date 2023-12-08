@@ -1,6 +1,6 @@
 # Quantitative-Finance
 
-<h2>Requirements</h2>
+<h2>Possible Issues</h2>
 <br>
 <p>
   If you get errors with urllib3, do the following:
