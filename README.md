@@ -13,7 +13,7 @@
 <h3>Backend</h3>
 <hr>
 <p>Run 'pip3 install Flask' in the backend once</p>
-<p>Run 'pip3 install pandas' in the backend once</p>
+<p>Run 'pip3 install yfinance' in the backend once</p>
 <p>To start the backend server, run 'source venv/bin/activate' in the backend </p> 
 <p>Then run 'python3 server.py' in the backend virtual environment</p>
 <h4>API</h4>
