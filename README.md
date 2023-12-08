@@ -25,9 +25,10 @@
 <h4>API</h4>
 <p>Add API in a neat table here</p>
 
-|    Route   |  Methods  |  Return  |
-|------------|----------|----------|
+|    Route           |  Methods  |  Return                                          |
+|--------------------|-----------|--------------------------------------------------|
 | `/summary/<stock>` |   `GET`   | `{Stock, Last_Price, Change, Percentage_Change}` |
+| `/news/all`        |   `GET`   | `{meta: {}, data: []}`                           |
 
 
 
