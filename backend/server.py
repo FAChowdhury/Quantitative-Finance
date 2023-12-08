@@ -1,6 +1,6 @@
 from flask import Flask
 from json import dumps
-from helpers import summary
+from helpers import summary, all_financial_news
 
 app = Flask(__name__)
 
@@ -8,6 +8,10 @@ app = Flask(__name__)
 @app.route("/summary/<stock>", methods=["GET"])
 def summary_stocks(stock):
     return dumps(summary(stock))
+
+@app.route("/news/all", methods=["GET"])
+def all_news():
+    return dumps(all_financial_news())
 
 # End of API Routes
 
