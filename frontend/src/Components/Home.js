@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ButtonAppBar from "./ButtonAppBar";
 import Typography from '@mui/material/Typography';
 import StockSummary from "./StockSummary";
-import { StepIcon } from "@mui/material";
+import NewsCard from "./NewsCard";
 
 const homePage = {
     display: 'flex',
@@ -18,6 +18,23 @@ const stockSummary = {
 }
 
 const Home = () => {
+    const [finNews, setFinNews] = useState([]);
+
+    useEffect(() => {
+        let path = `/news/all`
+		fetch(`${path}`).then((response) => {
+			if (!response.ok) {
+				throw new Error('Network response was not ok');
+			}
+			return response.json();
+		}).then((data) => {
+            setFinNews(data.data)
+            console.log(data.data)
+		}).catch((error) => {
+			console.log(error)
+		})
+    }, [])
+
     return(
         <div>
             <ButtonAppBar/>
@@ -26,7 +43,11 @@ const Home = () => {
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1, paddingBottom: '12px', }}>
                         Today's financial news
                     </Typography>
-                    <div></div>
+                    <div>
+                        <NewsCard data={finNews[0]} />
+                        <NewsCard data={finNews[1]} />
+                        <NewsCard data={finNews[2]} />
+                    </div>
                 </div>
                 <div style={stockSummary}>
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1, paddingBottom: '12px', }}>
@@ -40,7 +61,7 @@ const Home = () => {
                         <StockSummary symbol='AAPL'/>
                     </div>
                     <Typography variant="h7" component="div" sx={{ flexGrow: 1, fontSize: '12px', textAlign: 'right'}}>
-                        *Weekly Data
+                        *Daily Data
                     </Typography>
                 </div>
             </div>

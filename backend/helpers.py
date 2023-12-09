@@ -6,20 +6,20 @@ from news_store import news_store
 MARKETAUX_API = 'YzgQZXmpnqwyzMotQZdmtA83hg3TW34kqzOnzeT5'
 
 '''
-Returns the weekly summary of a stock. This includes: stock symbol, last weekly closing price,
-and last weekly percentage change.
+Returns the daily summary of a stock. This includes: stock symbol,  last closing price,
+and last percentage change.
 '''
 def summary(stock: str):
     try:
         # Define the start and end dates for fetching data
         end_date = datetime.now()
-        start_date = end_date - timedelta(days=7)  # Fetch data for the last week (7 days)
+        start_date = end_date - timedelta(days=3)  # Make sure data for today and yesterday are definitely fetched
 
         # Create a Ticker object using yfinance
         ticker = yf.Ticker(stock)
 
-        # Get historical data for the specified period (weekly)
-        historical_data = ticker.history(start=start_date, end=end_date, interval='1wk')
+        # Get historical data for the specified period (daily)
+        historical_data = ticker.history(start=start_date, end=end_date, interval='1d')
         # Extract the last closing price
         last_close_price = historical_data['Close'].iloc[-1] 
         second_last_close_price = historical_data['Close'].iloc[-2]

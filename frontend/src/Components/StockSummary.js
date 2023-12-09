@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Typography } from "@mui/material";
-import { baseUrl } from "../helpers";
 
 const basicStyle = {
 	display: 'flex',
@@ -47,7 +46,7 @@ const StockSummary = (props) => {
 		}).catch((error) => {
 			console.log(error)
 		})
-	}, [])
+	}, [props.symbol])
 
 	return (
 		<div style={basicStyle}>
