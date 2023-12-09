@@ -51,7 +51,7 @@ def all_financial_news():
     time_difference = now - yesterday_4pm
     hours_difference = time_difference.total_seconds() / 3600 
     if hours_difference > 24 or len(news) == 0:
-        url = f'https://api.marketaux.com/v1/news/all?filter_entities=true&language=en&api_token={MARKETAUX_API}'
+        url = f'https://api.marketaux.com/v1/news/all?symbols=TSLA,AMZN,MSFT,GOOG,CBA.AX&filter_entities=true&language=en&api_token={MARKETAUX_API}'
         response = requests.get(url)
 
         if response.status_code == 200:
