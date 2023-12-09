@@ -4,7 +4,6 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
 
 const flexBox = {
     display: 'flex',
@@ -28,7 +27,8 @@ const imgStyle = {
  */
 
 export default function NewsCard(props) {
-	const navigate = useNavigate();
+	const [isHovered, setIsHovered] = React.useState(false);
+
 	const [title, setTitle] = React.useState('title')
 	const [description, setDescription] = React.useState('description')
 	const [img, setImg] = React.useState('')
@@ -57,7 +57,9 @@ export default function NewsCard(props) {
 	}, [props])
   return (
     <Card sx={{ maxWidth: 750, marginBottom: '20px'}}>
-      <CardActionArea sx={flexBox} onClick={navigateToUrl}>
+      <CardActionArea sx={flexBox} onClick={navigateToUrl} onMouseOver={() => {setIsHovered(true)}}
+				onMouseOut={() => {setIsHovered(false)}}
+			>
         <CardMedia
           component="img"
           height="140"
@@ -66,7 +68,7 @@ export default function NewsCard(props) {
 					style={imgStyle}
         />
         <CardContent>
-          <Typography gutterBottom variant="h5" component="div">
+          <Typography gutterBottom variant="h5" component="div" sx={{color: isHovered ? 'blue' : 'black'}}>
             {title}
           </Typography>
           <Typography variant="body2" color="text.secondary">
