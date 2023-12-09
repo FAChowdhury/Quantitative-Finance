@@ -29,6 +29,7 @@ const Search = styled('div')(({ theme }) => ({
     marginLeft: theme.spacing(1),
     width: 'auto',
   },
+  maxWidth: '180px',
 }));
 
 const SearchIconWrapper = styled('div')(({ theme }) => ({

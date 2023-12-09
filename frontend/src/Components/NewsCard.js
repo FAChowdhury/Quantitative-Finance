@@ -4,10 +4,7 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
-
-const flexBox = {
-    display: 'flex',
-}
+import { useState } from 'react';
 
 const imgStyle = {
 	width: '200px',
@@ -27,6 +24,13 @@ const imgStyle = {
  */
 
 export default function NewsCard(props) {
+
+	const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  const handleResize = () => {
+    setWindowWidth(window.innerWidth);
+  };
+
 	const [isHovered, setIsHovered] = React.useState(false);
 
 	const [title, setTitle] = React.useState('title')
@@ -55,6 +59,22 @@ export default function NewsCard(props) {
 			setUrl(props.data.url)
 		}
 	}, [props])
+
+	React.useEffect(() => {
+		// Add event listener on component mount
+    window.addEventListener('resize', handleResize);
+
+    // Clean up event listener on component unmount
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+	}, [])
+
+	const flexBox = {
+    display: 'flex',
+		flexDirection: windowWidth > 800 ? 'row' : 'column',
+	}
+
   return (
     <Card sx={{ maxWidth: 750, marginBottom: '20px'}}>
       <CardActionArea sx={flexBox} onClick={navigateToUrl} onMouseOver={() => {setIsHovered(true)}}

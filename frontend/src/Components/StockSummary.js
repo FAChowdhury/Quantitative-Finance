@@ -25,6 +25,12 @@ const dataBox = {
  */
 
 const StockSummary = (props) => {
+	const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  const handleResize = () => {
+	setWindowWidth(window.innerWidth);
+  };
+
 	const [symbol, setSymbol] = useState('-');
 	const [price, setPrice] = useState('-');
 	const [change, setChange] = useState('-');
@@ -48,6 +54,20 @@ const StockSummary = (props) => {
 		})
 	}, [props.symbol])
 
+	React.useEffect(() => {
+		// Add event listener on component mount
+    window.addEventListener('resize', handleResize);
+
+    // Clean up event listener on component unmount
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+	}, [])
+
+	const textStyle = {
+		fontSize: windowWidth > 600 ? '24px' : '12px',
+	}
+
 	return (
 		<div style={basicStyle}>
 			<div style={symbolBox}>
@@ -57,17 +77,17 @@ const StockSummary = (props) => {
 			</div>
 			<div style={dataBox}>
 				<div>
-					<Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+					<Typography variant="h6" component="div" sx={[{ flexGrow: 1 }, textStyle]}>
 						{`$${price}`}
 					</Typography>
 				</div>
 				<div>
-					<Typography variant="h6" component="div" sx={[{ flexGrow: 1 }, {color : change > 0 ? 'green' : 'red'}]}>
+					<Typography variant="h6" component="div" sx={[{ flexGrow: 1 }, {color : change > 0 ? 'green' : 'red'}, textStyle]}>
 						{change > 0 ? `+${change}` : `${change}`}
 					</Typography>
 				</div>
 				<div>
-					<Typography variant="h6" component="div" sx={[{ flexGrow: 1 }, {color : pctChange > 0 ? 'green' : 'red'}]}>
+					<Typography variant="h6" component="div" sx={[{ flexGrow: 1 }, {color : pctChange > 0 ? 'green' : 'red'}, textStyle]}>
 						{pctChange > 0 ? `↑${pctChange}%` : `↓${pctChange}%`}
 					</Typography>
 				</div>
