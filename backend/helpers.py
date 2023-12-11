@@ -13,13 +13,14 @@ def summary(stock: str):
 		try:
 				# Define the start and end dates for fetching data
 				end_date = datetime.now()
-				start_date = end_date - timedelta(days=3)  # Make sure data for today and yesterday are definitely fetched
+				start_date = end_date - timedelta(days=7)  # Make sure data for today and yesterday are definitely fetched
 
 				# Create a Ticker object using yfinance
 				ticker = yf.Ticker(stock)
 
 				# Get historical data for the specified period (daily)
 				historical_data = ticker.history(start=start_date, end=end_date, interval='1d')
+				print(historical_data)
 				# Extract the last closing price
 				last_close_price = historical_data['Close'].iloc[-1] 
 				second_last_close_price = historical_data['Close'].iloc[-2]
@@ -71,3 +72,16 @@ def all_financial_news():
 				# fetch the data from news_store
 				store = news_store.get()
 				return store['news'][0]
+
+'''
+	Given a string, it returns a boolean indicating if the stock exists or not.
+'''
+def is_valid_stock(symbol: str):
+	try:
+		stock = yf.Ticker(symbol)
+		info = stock.info
+		if info['symbol'].upper() == symbol.upper():
+			return True
+	except Exception as e:
+		pass
+	return False

@@ -61,6 +61,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 export default function ButtonAppBar() {
     const [drawerOpen, setDrawerOpen] = useState(false);
+    const [search, setSearch] = useState('');
 
 		const navigate = useNavigate();
 
@@ -73,6 +74,14 @@ export default function ButtonAppBar() {
     }
     setDrawerOpen(open);
   };
+
+  const handleSearch = (event) => {
+    if (event.key === 'Enter') {
+      // go to page of searched stock
+      navigate(`/quote/${search}`)
+    }
+  }
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static" sx={{backgroundColor: '#420194'}}>
@@ -97,6 +106,8 @@ export default function ButtonAppBar() {
             <StyledInputBase
               placeholder="Search..."
               inputProps={{ 'aria-label': 'search' }}
+              onChange={(e) => {setSearch(e.target.value)}}
+              onKeyDown={handleSearch}
             />
           </Search>
         </Toolbar>
