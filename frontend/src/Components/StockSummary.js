@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Typography } from "@mui/material";
+import { Typography, Box } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 const basicStyle = {
 	display: 'flex',
@@ -27,9 +28,18 @@ const dataBox = {
 const StockSummary = (props) => {
 	const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
-  const handleResize = () => {
-	setWindowWidth(window.innerWidth);
-  };
+	const handleResize = () => {
+		setWindowWidth(window.innerWidth);
+	};
+
+	const [isHovered, setIsHovered] = useState(false);
+	const handleMouseEnter = () => {
+		setIsHovered(true);
+	  };
+	
+	  const handleMouseLeave = () => {
+		setIsHovered(false);
+	  };
 
 	const [symbol, setSymbol] = useState('-');
 	const [price, setPrice] = useState('-');
@@ -68,30 +78,37 @@ const StockSummary = (props) => {
 		fontSize: windowWidth > 600 ? '24px' : '12px',
 	}
 
+	const navigate = useNavigate();
+	const onClickHandler = () => {
+		navigate(`/quote/${props.symbol}`)
+	}
+
 	return (
-		<div style={basicStyle}>
-			<div style={symbolBox}>
-				<Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-					<b>{symbol}</b>
-				</Typography>
-			</div>
-			<div style={dataBox}>
-				<div>
-					<Typography variant="h6" component="div" sx={[{ flexGrow: 1 }, textStyle]}>
-						{`$${price}`}
+		<div onClick={onClickHandler}>
+			<Box sx={[basicStyle, {backgroundColor: isHovered ? '#DDC3FA' : 'white', cursor: isHovered ? 'pointer': 'cursor'}]} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+				<div style={symbolBox}>
+					<Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+						<b>{symbol}</b>
 					</Typography>
 				</div>
-				<div>
-					<Typography variant="h6" component="div" sx={[{ flexGrow: 1 }, {color : change > 0 ? 'green' : 'red'}, textStyle]}>
-						{change > 0 ? `+${change}` : `${change}`}
-					</Typography>
+				<div style={dataBox}>
+					<div>
+						<Typography variant="h6" component="div" sx={[{ flexGrow: 1 }, textStyle]}>
+							{`$${price}`}
+						</Typography>
+					</div>
+					<div>
+						<Typography variant="h6" component="div" sx={[{ flexGrow: 1 }, {color : change > 0 ? 'green' : 'red'}, textStyle]}>
+							{change > 0 ? `+${change}` : `${change}`}
+						</Typography>
+					</div>
+					<div>
+						<Typography variant="h6" component="div" sx={[{ flexGrow: 1 }, {color : pctChange > 0 ? 'green' : 'red'}, textStyle]}>
+							{pctChange > 0 ? `↑${pctChange}%` : `↓${pctChange}%`}
+						</Typography>
+					</div>
 				</div>
-				<div>
-					<Typography variant="h6" component="div" sx={[{ flexGrow: 1 }, {color : pctChange > 0 ? 'green' : 'red'}, textStyle]}>
-						{pctChange > 0 ? `↑${pctChange}%` : `↓${pctChange}%`}
-					</Typography>
-				</div>
-			</div>
+			</Box>
 		</div>
 	);
 }

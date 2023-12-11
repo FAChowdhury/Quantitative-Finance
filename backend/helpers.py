@@ -20,7 +20,6 @@ def summary(stock: str):
 
 				# Get historical data for the specified period (daily)
 				historical_data = ticker.history(start=start_date, end=end_date, interval='1d')
-				print(historical_data)
 				# Extract the last closing price
 				last_close_price = historical_data['Close'].iloc[-1] 
 				second_last_close_price = historical_data['Close'].iloc[-2]

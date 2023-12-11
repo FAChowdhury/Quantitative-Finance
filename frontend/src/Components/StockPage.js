@@ -35,7 +35,7 @@ const StockPage = () => {
 				</Typography>
 				: !isValid
 				? <Typography variant="h3">
-					The stock {params.stock} does not exist. Please input a correct stock!
+					The stock '{params.stock}' does not exist. Please input a correct stock!
 				</Typography>
 				: <Typography variant="h3">
 						TODO: {params.stock}
