@@ -22,7 +22,7 @@
 |--------------------|-----------|-------------------------------------------------------------------------------------------------------------------------|
 | `/summary/<stock>` |   `GET`   | `{Stock, Last_Price, Change, Percentage_Change}`                                                                        |
 | `/news/all`        |   `GET`   | `{meta: {}, data: []}`, for more information, visit <a href="https://www.marketaux.com/documentation">Marketaux Docs</a>|
-| `/isValid/<stock>` |   `GET`   | `boolean`
+| `/isValid/<stock>` |   `GET`   | `boolean`                                                                                                               |
 
 
 
