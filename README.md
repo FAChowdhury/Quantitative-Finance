@@ -20,9 +20,10 @@
 
 |    Route           |  Methods  |  Return                                                                                                                 |
 |--------------------|-----------|-------------------------------------------------------------------------------------------------------------------------|
-| `/summary/<stock>` |   `GET`   | `{Stock, Last_Price, Change, Percentage_Change}`                                                                        |
+| `/summary/<stock>` |   `GET`   | `{Stock: str, Last_Price: int, Change: float, Percentage_Change: float}`                                                                        |
 | `/news/all`        |   `GET`   | `{meta: {}, data: []}`, for more information, visit <a href="https://www.marketaux.com/documentation">Marketaux Docs</a>|
 | `/isValid/<stock>` |   `GET`   | `boolean`                                                                                                               |
+| `/data/<stock>`    |   `GET`   | `[{date: str, data: int}]`
 
 
 
