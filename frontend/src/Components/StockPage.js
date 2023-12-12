@@ -3,6 +3,7 @@ import ButtonAppBar from "./ButtonAppBar";
 import { useParams } from "react-router-dom";
 import { Typography, Box } from "@mui/material";
 import { Line } from 'react-chartjs-2';
+import Chart from 'chart.js/auto';
 
 const options = {
 	scales: {
