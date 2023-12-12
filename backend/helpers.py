@@ -94,7 +94,7 @@ def get_stock_data(symbol: str):
 		stock = yf.Ticker(symbol)
 		historical_data = stock.history(period="5y")['Close']
 		for date, price in historical_data.iteritems():
-			dataList.append({'symbol': symbol, 'date': date.strftime('%d-%m-%Y'), 'price': price})
+			dataList.append({'symbol': symbol, 'date': date.strftime('%d-%m-%Y'), 'price': round(price, 2)})
 		
 		return dataList
 	except Exception as e:
