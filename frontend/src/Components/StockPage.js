@@ -4,17 +4,7 @@ import { useParams } from "react-router-dom";
 import { Typography, Box } from "@mui/material";
 import { Line } from 'react-chartjs-2';
 import Chart from 'chart.js/auto';
-
-const options = {
-	scales: {
-		x: {
-		type: 'category', // Ensure the x-axis scale is set to 'category' for categorical data
-		},
-		y: {
-		beginAtZero: true,
-		},
-	},
-};
+import StockChart from "./StockChart";
 
 const StockPage = () => {
 	const params = useParams();
@@ -90,24 +80,7 @@ const StockPage = () => {
 					The stock '{params.stock}' does not exist. Please input a valid stock!
 				</Typography>
 				: <Box>
-					<Typography variant="h3">
-						TODO: {params.stock}
-					</Typography>
-					<Line data={
-						{
-							labels: labels,
-							datasets: [
-								{
-								label: `Price of ${params.stock} over time`,
-								data: x, 
-								fill: false,
-								borderColor: isIncreasing ? 'green' : 'red',
-								tension: 0.1,
-								pointRadius: 0,
-								},
-							],
-						}
-					} options={options}/>
+					<StockChart labels={labels} data={x} isIncreasing={isIncreasing} />
 				</Box>
 			}
 		</div>
