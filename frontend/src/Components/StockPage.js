@@ -114,7 +114,7 @@ const StockPage = () => {
 				</Typography>
 				: <Box sx={{padding: '20px 48px',}}>
 					<Typography variant="h3" >
-        				{name} ({params.stock})
+        				{name} ({params.stock.toUpperCase()})
 						<hr />
       				</Typography>
 					<div style={stockPage}>

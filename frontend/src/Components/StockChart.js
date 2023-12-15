@@ -66,7 +66,7 @@ const StockChart = (props) => {
 							labels: priceDate,
 							datasets: [
 								{
-								label: `Price of ${params.stock} over time`,
+								label: `Price of ${params.stock.toUpperCase()} over time`,
 								data: priceData, 
 								fill: false,
 								borderColor: isIncreasing ? 'green' : 'red',
