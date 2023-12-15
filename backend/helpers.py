@@ -99,3 +99,10 @@ def get_stock_data(symbol: str):
 		return dataList
 	except Exception as e:
 		raise e("Stock symbol does not exist!")
+	
+def get_stock_name(symbol: str):
+    stock = yf.Ticker(symbol)
+    if stock.info.get('longName'):
+        return stock.info['longName']
+    else:
+        raise Exception("Full name not found for this symbol.")

@@ -6,10 +6,24 @@ import { Line } from 'react-chartjs-2';
 import Chart from 'chart.js/auto';
 import StockChart from "./StockChart";
 
+const left = {
+	flex: '5',
+}
+
+const right = {
+	flex: '3',
+}
+
+const stockPage = {
+	display: 'flex',
+	gap: '48px',
+}
+
 const StockPage = () => {
 	const params = useParams();
 	const [isValid, setIsValid] = useState(false);
 	const [loading, setLoading] = useState(false);
+	const [name, setName] = useState('');
 
 	const [labels, setLabels] = useState([])
 	const [x, setX] = useState([])
@@ -68,6 +82,25 @@ const StockPage = () => {
 		})
 	}, [params.stock])
 
+	useEffect(() => {
+		setLoading(true)
+		let path = `/name/${params.stock}`
+		fetch(path)
+		.then((response) => {
+			if (!response.ok) {
+				throw new Error('Network response was not ok');
+			}
+			return response.json();
+		})
+		.then((data) => {
+			setName(data)
+			setLoading(false)
+		})
+		.catch((error) => {
+			console.log(error)
+		})
+	}, [params.stock])
+
 	return (
 		<div>
 			<ButtonAppBar />
@@ -79,8 +112,19 @@ const StockPage = () => {
 				? <Typography variant="h3">
 					The stock '{params.stock}' does not exist. Please input a valid stock!
 				</Typography>
-				: <Box>
-					<StockChart labels={labels} data={x} isIncreasing={isIncreasing} />
+				: <Box sx={{padding: '20px 48px',}}>
+					<Typography variant="h3" >
+        				{name} ({params.stock})
+						<hr />
+      				</Typography>
+					<div style={stockPage}>
+						<div style={left}>
+							<StockChart labels={labels} data={x} isIncreasing={isIncreasing} />
+						</div>
+						<div style={right}>
+							Side Section
+						</div>
+					</div>
 				</Box>
 			}
 		</div>
