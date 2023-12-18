@@ -4,8 +4,6 @@ import Typography from '@mui/material/Typography';
 import StockSummary from "./StockSummary";
 import NewsCard from "./NewsCard";
 
-
-
 const news = {
 	flex: '5',
 }
@@ -18,9 +16,9 @@ const stockSummary = {
 const Home = () => {
 	const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
-  const handleResize = () => {
-	setWindowWidth(window.innerWidth);
-  };
+	const handleResize = () => {
+		setWindowWidth(window.innerWidth);
+	};
 
 	const [finNews, setFinNews] = useState([]);
 
@@ -39,12 +37,12 @@ const Home = () => {
 		})
 
 		// Add event listener on component mount
-    window.addEventListener('resize', handleResize);
+		window.addEventListener('resize', handleResize);
 
-    // Clean up event listener on component unmount
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
+		// Clean up event listener on component unmount
+		return () => {
+		window.removeEventListener('resize', handleResize);
+		};
 	}, [])
 
 	const homePage = {

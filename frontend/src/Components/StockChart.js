@@ -53,7 +53,7 @@ const StockChart = (props) => {
   }
 
   return (
-    <div>
+    <div style={{maxWidth: '800px'}}>
       <div style={{display: 'flex'}}>
         <Button onClick={() => {timeFrame(5)}} variant="text">1W</Button>
         <Button onClick={() => {timeFrame(21)}} variant="text">1M</Button>

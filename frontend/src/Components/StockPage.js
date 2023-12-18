@@ -6,6 +6,7 @@ import { Line } from 'react-chartjs-2';
 import Chart from 'chart.js/auto';
 import StockChart from "./StockChart";
 import AccordianAbout from "./AccordianAbout";
+import StockPageSummary from "./StockPageSummary";
 
 const left = {
 	flex: '5',
@@ -15,12 +16,13 @@ const right = {
 	flex: '3',
 }
 
-const stockPage = {
-	display: 'flex',
-	gap: '48px',
-}
-
 const StockPage = () => {
+	const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+	const handleResize = () => {
+		setWindowWidth(window.innerWidth);
+	};
+
 	const params = useParams();
 	const [isValid, setIsValid] = useState(false);
 	const [loading, setLoading] = useState(false);
@@ -30,6 +32,16 @@ const StockPage = () => {
 	const [x, setX] = useState([])
 
 	const [isIncreasing, setIsIncreasing] = useState(false);
+
+	useEffect(() => {
+		// Add event listener on component mount
+		window.addEventListener('resize', handleResize);
+
+		// Clean up event listener on component unmount
+		return () => {
+		window.removeEventListener('resize', handleResize);
+		};
+	}, [])
 
 	useEffect(() => {
 		setLoading(true)
@@ -102,6 +114,12 @@ const StockPage = () => {
 		})
 	}, [params.stock])
 
+	const stockPage = {
+		display: 'flex',
+		flexDirection: windowWidth > 1325 ? 'row' : 'column',
+		gap: '48px',
+	}
+
 	return (
 		<div>
 			<ButtonAppBar />
@@ -120,10 +138,11 @@ const StockPage = () => {
       				</Typography>
 					<div style={stockPage}>
 						<div style={left}>
+							<StockPageSummary symbol={params.stock}/>
 							<StockChart labels={labels} data={x} isIncreasing={isIncreasing} />
 						</div>
 						<div style={right}>
-							<AccordianAbout symbol={params.stock} />
+							<AccordianAbout symbol={params.stock}/>
 						</div>
 					</div>
 				</Box>
