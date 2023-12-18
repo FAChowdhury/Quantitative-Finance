@@ -5,6 +5,7 @@ import { Typography, Box } from "@mui/material";
 import { Line } from 'react-chartjs-2';
 import Chart from 'chart.js/auto';
 import StockChart from "./StockChart";
+import AccordianAbout from "./AccordianAbout";
 
 const left = {
 	flex: '5',
@@ -122,7 +123,7 @@ const StockPage = () => {
 							<StockChart labels={labels} data={x} isIncreasing={isIncreasing} />
 						</div>
 						<div style={right}>
-							Side Section
+							<AccordianAbout symbol={params.stock} />
 						</div>
 					</div>
 				</Box>

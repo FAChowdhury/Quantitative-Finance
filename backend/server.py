@@ -1,6 +1,7 @@
 from flask import Flask
 from json import dumps
-from helpers import summary, all_financial_news, is_valid_stock, get_stock_data, get_stock_name
+from helpers import *
+
 
 app = Flask(__name__)
 
@@ -24,6 +25,10 @@ def getStockDate(stock):
 @app.route("/name/<stock>", methods=["GET"])
 def getStockName(stock):
     return dumps(get_stock_name(stock))
+
+@app.route("/about/<stock>", methods=["GET"])
+def getStockAbout(stock):
+    return dumps(get_stock_about(stock))
 
 # End of API Routes
 

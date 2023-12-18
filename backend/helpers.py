@@ -1,5 +1,6 @@
 import yfinance as yf
 import requests
+import wikipedia
 from datetime import datetime, timedelta
 from news_store import news_store
 
@@ -106,3 +107,10 @@ def get_stock_name(symbol: str):
         return stock.info['longName']
     else:
         raise Exception("Full name not found for this symbol.")
+
+def get_stock_about(symbol: str):
+	try:
+		name = get_stock_name(symbol)
+		return wikipedia.summary(name)
+	except:
+		raise Exception(f"Could not retrieve data for {symbol}")
