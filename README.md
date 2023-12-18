@@ -24,8 +24,8 @@
 | `/news/all`        |   `GET`   | `{meta: {}, data: []}`, for more information, visit <a href="https://www.marketaux.com/documentation">Marketaux Docs</a>|
 | `/isValid/<stock>` |   `GET`   | `boolean`                                                                                                               |
 | `/data/<stock>`    |   `GET`   | `[{symbol: str, date: str, price: int}]`                                                                                |
-| `/name/<stock>`    |   `GET`   | `name: str`                                                                                                                  |
-
+| `/name/<stock>`    |   `GET`   | `name: str`                                                                                                             |
+| `/about/<stock>`   |   `GET`   | `str`, information about the stock from wikipedia
 
 
 <h3>Frontend</h3>
