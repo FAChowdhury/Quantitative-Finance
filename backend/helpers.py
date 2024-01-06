@@ -3,8 +3,28 @@ import requests
 import wikipedia
 from datetime import datetime, timedelta
 from news_store import news_store
+from statsmodels.tsa.stattools import adfuller
+from statsmodels.tsa.arima.model import ARIMA
+from pmdarima import auto_arima
+from sklearn.metrics import mean_squared_error
+from math import sqrt
+import pandas as pd
+# import warnings
 
 MARKETAUX_API = 'YzgQZXmpnqwyzMotQZdmtA83hg3TW34kqzOnzeT5'
+
+'''
+Helpers
+'''
+
+'''
+Perform ADF Test on timeseries data to determine if they are stationary
+Returns a boolean to indicate if the time series data is stationary
+'''
+def is_stationary(timeseries):
+	res = adfuller(timeseries)
+	# return False if res[1] > 0.05 else True
+	return [False if res[1] > 0.05 else True, res[0], res[1]]
 
 '''
 Returns the daily summary of a stock. This includes: stock symbol,  last closing price,
@@ -87,7 +107,7 @@ def is_valid_stock(symbol: str):
 	return False
 
 '''
-	Given a stock symbol, it returns all the stock prices
+	Given a stock symbol, it returns all the stock close prices for the past 5 years
 '''
 def get_stock_data(symbol: str):
 	try:
@@ -114,3 +134,82 @@ def get_stock_about(symbol: str):
 		return wikipedia.summary(name)
 	except:
 		raise Exception(f"Could not retrieve data for {symbol}")
+
+
+'''
+Return {ForcastedPrices, Dates, ADF p-value, RMSE, ARIMA model order (p,d,q)}
+'''
+def predict_stock(symbol: str):
+	stock = yf.Ticker(symbol)
+	historical_data = stock.history(period="5y")
+	data = historical_data['Close']
+	stationary = is_stationary(data)
+	# print(historical_data)
+	if not stationary[0]:
+		# make the time series data stationary using differencing
+		historical_data['Close_diff'] = historical_data['Close'] - historical_data['Close'].shift(1)
+		historical_data = historical_data.dropna()
+		# print(historical_data)
+		# print(is_stationary(historical_data['Close_diff']))
+		data = historical_data['Close_diff']
+		stationary = is_stationary(historical_data['Close_diff'])
+		
+	differenced = False if data.name != 'Close_diff' else True
+	print(data)
+	print(stationary)
+	print(differenced)
+
+	# if differencing was required to make data stationary
+	if differenced:
+		# fitting ARIMA Model
+		# warnings.filterwarnings("ignore")
+		stepwise = auto_arima(data, trace=False, suppress_warnings=True)
+		stepwise_fit = stepwise.fit(data)
+		# print(stepwise_fit.order) # gives order (p,d,q) of the best model fit
+		
+
+		# Split data for training and testing
+		train = data.iloc[:-60] # all data except the last two months
+		test = data.iloc[-60:] # last two moths data
+		
+		# Training the model
+		model = ARIMA(train, order = stepwise_fit.order)
+		model = model.fit()
+		print(model.summary())
+
+		# Test the Model
+		start = len(train)
+		end = len(train) + len(test) - 1
+		pred = model.predict(start = start, end = end, typ='levels')
+		pred.index = data.index[start:end+1]
+		rmse = sqrt(mean_squared_error(pred, test))
+		print(rmse)
+
+		# Forecast using the model
+		model2 = ARIMA(data, order=stepwise_fit.order)
+		model2 = model2.fit()
+		today = datetime.today()
+		next_business_day = today + pd.offsets.BDay()
+		print(next_business_day)
+		end_date = today + pd.DateOffset(months=6)
+		forecast_dates = pd.date_range(start = next_business_day, end = end_date, freq='B')
+		# NEED TO FIX END DATE FOR BOTTOM LINE TO ENSURE IT ALWAYS WORKS!!
+		pred = model2.predict(start = len(data), end=len(data) + len(forecast_dates) - 1, typ='levels').rename('Stock Price Forecasts')
+		pred.index = forecast_dates
+
+		# Pass the list of date below as the dates of the forcasted stock prices
+		dates = list(forecast_dates.strftime('%d-%m-%Y'))
+
+		# Pass the list below as the forcasted stock prices
+		print(pred)
+
+		predicted_stock_prices = []
+		last_price = historical_data['Close'].iloc[-1]
+		for price in pred:
+			last_price += price
+			predicted_stock_prices.append(last_price)
+
+		print(predicted_stock_prices, dates)
+		print(len(predicted_stock_prices), len(dates))
+
+	# TODO: FOR THE CASE THAT DIFFERENCING WAS NOT REQUIRED 
