@@ -9,7 +9,7 @@ from pmdarima import auto_arima
 from sklearn.metrics import mean_squared_error
 from math import sqrt
 import pandas as pd
-# import warnings
+import warnings
 
 MARKETAUX_API = 'YzgQZXmpnqwyzMotQZdmtA83hg3TW34kqzOnzeT5'
 
@@ -162,7 +162,7 @@ def predict_stock(symbol: str):
 	# if differencing was required to make data stationary
 	if differenced:
 		# fitting ARIMA Model
-		# warnings.filterwarnings("ignore")
+		warnings.filterwarnings("ignore")
 		stepwise = auto_arima(data, trace=False, suppress_warnings=True)
 		stepwise_fit = stepwise.fit(data)
 		# print(stepwise_fit.order) # gives order (p,d,q) of the best model fit
