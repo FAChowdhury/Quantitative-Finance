@@ -30,7 +30,7 @@ const PredictChart = (props) => {
             labels: props.dates,
             datasets: [
               {
-              label: `Predicted prices of ${params.stock.toUpperCase()} over the coming month`,
+              label: `Predicted prices of ${params.stock.toUpperCase()} over the coming fortnight`,
               data: props.prices, 
               fill: false,
               borderColor: 'purple',

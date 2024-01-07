@@ -194,7 +194,7 @@ def predict_stock(symbol: str):
 	today = datetime.today()
 	next_business_day = today + pd.offsets.BDay()
 	# print(next_business_day)
-	end_date = today + pd.DateOffset(months=6)
+	end_date = today + pd.DateOffset(weeks=2)
 	forecast_dates = pd.date_range(start = next_business_day, end = end_date, freq='B')
 	# NEED TO FIX END DATE FOR BOTTOM LINE TO ENSURE IT ALWAYS WORKS!!
 	pred = model2.predict(start = len(data), end=len(data) + len(forecast_dates) - 1, typ='levels').rename('Stock Price Forecasts')
