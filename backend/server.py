@@ -30,6 +30,10 @@ def getStockName(stock):
 def getStockAbout(stock):
     return dumps(get_stock_about(stock))
 
+@app.route("/predict/<stock>", methods=["GET"])
+def getStockPredictions(stock):
+    return dumps(predict_stock(stock))
+
 # End of API Routes
 
 if __name__ == "__main__":

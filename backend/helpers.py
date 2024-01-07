@@ -27,6 +27,10 @@ def is_stationary(timeseries):
 	return [False if res[1] > 0.05 else True, res[0], res[1]]
 
 '''
+END Helpers
+'''
+
+'''
 Returns the daily summary of a stock. This includes: stock symbol,  last closing price,
 and last percentage change.
 '''
@@ -137,7 +141,7 @@ def get_stock_about(symbol: str):
 
 
 '''
-Return {ForcastedPrices, Dates, ADF p-value, RMSE, ARIMA model order (p,d,q)}
+Return {Predictions: [], Dates: [], p-value: float, RMSE: float,order: (p,d,q), differenced: boolean, stationary: boolean}
 '''
 def predict_stock(symbol: str):
 	stock = yf.Ticker(symbol)
@@ -155,61 +159,61 @@ def predict_stock(symbol: str):
 		stationary = is_stationary(historical_data['Close_diff'])
 		
 	differenced = False if data.name != 'Close_diff' else True
-	print(data)
-	print(stationary)
-	print(differenced)
+	# print(data)
+	# print(stationary)
+	# print(differenced)
 
 	# if differencing was required to make data stationary
+	# fitting ARIMA Model
+	warnings.filterwarnings("ignore")
+	stepwise = auto_arima(data, trace=False, suppress_warnings=True)
+	stepwise_fit = stepwise.fit(data)
+	# print(stepwise_fit.order) # gives order (p,d,q) of the best model fit
+	
+
+	# Split data for training and testing
+	train = data.iloc[:-60] # all data except the last two months
+	test = data.iloc[-60:] # last two moths data
+	
+	# Training the model
+	model = ARIMA(train, order = stepwise_fit.order)
+	model = model.fit()
+	# print(model.summary())
+
+	# Test the Model
+	start = len(train)
+	end = len(train) + len(test) - 1
+	pred = model.predict(start = start, end = end, typ='levels')
+	pred.index = data.index[start:end+1]
+	rmse = sqrt(mean_squared_error(pred, test))
+	# print(rmse)
+
+	# Forecast using the model
+	model2 = ARIMA(data, order=stepwise_fit.order)
+	model2 = model2.fit()
+	today = datetime.today()
+	next_business_day = today + pd.offsets.BDay()
+	# print(next_business_day)
+	end_date = today + pd.DateOffset(months=6)
+	forecast_dates = pd.date_range(start = next_business_day, end = end_date, freq='B')
+	# NEED TO FIX END DATE FOR BOTTOM LINE TO ENSURE IT ALWAYS WORKS!!
+	pred = model2.predict(start = len(data), end=len(data) + len(forecast_dates) - 1, typ='levels').rename('Stock Price Forecasts')
+	pred.index = forecast_dates
+
+	# Pass the list of date below as the dates of the forcasted stock prices
+	dates = list(forecast_dates.strftime('%d-%m-%Y'))
+
+	# Pass the list below as the forcasted stock prices
 	if differenced:
-		# fitting ARIMA Model
-		warnings.filterwarnings("ignore")
-		stepwise = auto_arima(data, trace=False, suppress_warnings=True)
-		stepwise_fit = stepwise.fit(data)
-		# print(stepwise_fit.order) # gives order (p,d,q) of the best model fit
-		
-
-		# Split data for training and testing
-		train = data.iloc[:-60] # all data except the last two months
-		test = data.iloc[-60:] # last two moths data
-		
-		# Training the model
-		model = ARIMA(train, order = stepwise_fit.order)
-		model = model.fit()
-		print(model.summary())
-
-		# Test the Model
-		start = len(train)
-		end = len(train) + len(test) - 1
-		pred = model.predict(start = start, end = end, typ='levels')
-		pred.index = data.index[start:end+1]
-		rmse = sqrt(mean_squared_error(pred, test))
-		print(rmse)
-
-		# Forecast using the model
-		model2 = ARIMA(data, order=stepwise_fit.order)
-		model2 = model2.fit()
-		today = datetime.today()
-		next_business_day = today + pd.offsets.BDay()
-		print(next_business_day)
-		end_date = today + pd.DateOffset(months=6)
-		forecast_dates = pd.date_range(start = next_business_day, end = end_date, freq='B')
-		# NEED TO FIX END DATE FOR BOTTOM LINE TO ENSURE IT ALWAYS WORKS!!
-		pred = model2.predict(start = len(data), end=len(data) + len(forecast_dates) - 1, typ='levels').rename('Stock Price Forecasts')
-		pred.index = forecast_dates
-
-		# Pass the list of date below as the dates of the forcasted stock prices
-		dates = list(forecast_dates.strftime('%d-%m-%Y'))
-
-		# Pass the list below as the forcasted stock prices
-		print(pred)
-
 		predicted_stock_prices = []
 		last_price = historical_data['Close'].iloc[-1]
 		for price in pred:
 			last_price += price
 			predicted_stock_prices.append(last_price)
-
-		print(predicted_stock_prices, dates)
-		print(len(predicted_stock_prices), len(dates))
-
-	# TODO: FOR THE CASE THAT DIFFERENCING WAS NOT REQUIRED 
+		# print(predicted_stock_prices, dates)
+		# print(len(predicted_stock_prices), len(dates))
+		return {"Predictions": predicted_stock_prices, "Dates": dates, "p-value": stationary[2], "RMSE": rmse, "order": stepwise_fit.order, "differenced": differenced, "stationarity": stationary[0]}
+	else:
+		# print(list(pred), dates)
+		# print(len(pred), len(dates))
+		return {"Predictions": list(pred), "Dates": dates, "p-value": stationary[2], "RMSE": rmse, "order": stepwise_fit.order, "differenced": differenced, "stationarity": stationary[0]}
