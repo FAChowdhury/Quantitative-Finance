@@ -16,7 +16,7 @@ const options = {
 		type: 'category', // Ensure the x-axis scale is set to 'category' for categorical data
 		},
 		y: {
-		beginAtZero: true,
+		beginAtZero: false,
 		},
 	},
 };
