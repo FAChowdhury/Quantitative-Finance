@@ -7,6 +7,9 @@ import Chart from 'chart.js/auto';
 import StockChart from "./StockChart";
 import AccordianAbout from "./AccordianAbout";
 import StockPageSummary from "./StockPageSummary";
+import PredictBtn from "./PredictBtn";
+import CircularProgress from '@mui/material/CircularProgress';
+import PredictChart from "./PredictChart";
 
 const left = {
 	flex: '5',
@@ -31,7 +34,13 @@ const StockPage = () => {
 	const [labels, setLabels] = useState([])
 	const [x, setX] = useState([])
 
+	const [predictedPrices, setPredictedPrices] = useState([])
+	const [predictedDates, setPredictedDates] = useState([])
+
 	const [isIncreasing, setIsIncreasing] = useState(false);
+
+	const [isVisibleWait, setIsVisibleWait] = useState(false);
+	const [isVisiblePredictChart, setIsVisiblePredictChart] = useState(false);
 
 	useEffect(() => {
 		// Add event listener on component mount
@@ -44,6 +53,7 @@ const StockPage = () => {
 	}, [])
 
 	useEffect(() => {
+		setIsVisiblePredictChart(false)
 		setLoading(true)
 		let path = `/data/${params.stock}`
 		fetch(path)
@@ -120,6 +130,31 @@ const StockPage = () => {
 		gap: '48px',
 	}
 
+	// call backend for predictions on stocks
+	const predictStocks = () => {
+		console.log("Predicting stocks...")
+		setIsVisibleWait(true)
+		let path = `/predict/${params.stock}`
+		fetch(path)
+		.then((response) => {
+			if (!response.ok) {
+				throw new Error('Network response was not ok');
+			}
+			return response.json();
+		})
+		.then((data) => {
+			setIsVisiblePredictChart(true)
+			setIsVisibleWait(false)
+			console.log(data)
+			setPredictedPrices(data.Predictions)
+			setPredictedDates(data.Dates)
+		})
+		.catch((error) => {
+			setIsVisibleWait(false)
+			console.log(error)
+		})
+	}
+
 	return (
 		<div>
 			<ButtonAppBar />
@@ -140,6 +175,17 @@ const StockPage = () => {
 						<div style={left}>
 							<StockPageSummary symbol={params.stock}/>
 							<StockChart labels={labels} data={x} isIncreasing={isIncreasing} />
+							<div onClick={predictStocks} style={{display: 'flex', gap: '20px'}}>
+								<PredictBtn />
+								{isVisibleWait && (
+									<div>
+										<CircularProgress sx={{marginTop: '20px',}} />
+									</div>
+								)}
+							</div>
+							{isVisiblePredictChart && (
+								<PredictChart prices={predictedPrices} dates={predictedDates} />
+							)}
 						</div>
 						<div style={right}>
 							<AccordianAbout symbol={params.stock}/>
