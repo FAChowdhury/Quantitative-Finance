@@ -183,6 +183,8 @@ const StockPage = () => {
 									</div>
 								)}
 							</div>
+							<div>
+							</div>
 							{isVisiblePredictChart && (
 								<PredictChart prices={predictedPrices} dates={predictedDates} />
 							)}
