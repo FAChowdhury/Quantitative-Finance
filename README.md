@@ -25,7 +25,7 @@
 | `/data/<stock>`    |   `GET`   | `[{symbol: str, date: str, price: int}]`                                                                                |
 | `/name/<stock>`    |   `GET`   | `name: str`                                                                                                             |
 | `/about/<stock>`   |   `GET`   | `str`, information about the stock from wikipedia                                                                       |
-| `/predict/<stock>` |   `GET`   | `{Predictions: [], Dates: [], p-value: float, RMSE: float, order: [], differenced: boolean, stationary: boolean}`       | 
+| `/predict/<stock>` |   `GET`   | `{Predictions: [], Dates: [], p_value: float, RMSE: float, order: [], differenced: boolean, stationary: boolean}`       | 
 
 
 <h3>Frontend</h3>
