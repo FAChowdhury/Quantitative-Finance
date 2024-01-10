@@ -78,9 +78,7 @@ class NewsStore:
         if not isinstance(store, dict):
             raise TypeError('store must be of type dictionary')
         self.__store = store
-    '''
-    Could be wrong
-    '''
+
     def clear_db(self):
         data = self.get()
         data['news'].clear()
