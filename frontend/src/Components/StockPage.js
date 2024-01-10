@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ButtonAppBar from "./ButtonAppBar";
 import { useParams } from "react-router-dom";
-import { Typography, Box } from "@mui/material";
+import { Typography, Box, setRef } from "@mui/material";
 import { Line } from 'react-chartjs-2';
 import Chart from 'chart.js/auto';
 import StockChart from "./StockChart";
@@ -10,6 +10,7 @@ import StockPageSummary from "./StockPageSummary";
 import PredictBtn from "./PredictBtn";
 import CircularProgress from '@mui/material/CircularProgress';
 import PredictChart from "./PredictChart";
+import Typewriter from 'typewriter-effect'
 
 const left = {
 	flex: '5',
@@ -18,6 +19,8 @@ const left = {
 const right = {
 	flex: '3',
 }
+
+const kaomojiList = ['♡⸜(˶˃ ᵕ ˂˶)⸝♡', '( ˶ˆᗜˆ˵ )', '!!(●ω●;)', '𓁹‿𓁹', '"૮₍  ˶•⤙•˶ ₎ა', '(╥﹏╥)', 'ʕ•͡-•ʔ', '༼ つ ◕_◕ ༽つ <3', '( ｡ •̀ ᴖ •́ ｡)', 'ᕙ(  •̀ ᗜ •́  )ᕗ']
 
 const StockPage = () => {
 	const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -46,6 +49,9 @@ const StockPage = () => {
 
 	const [isVisibleWait, setIsVisibleWait] = useState(false);
 	const [isVisiblePredictChart, setIsVisiblePredictChart] = useState(false);
+
+	const [predicting, setPredicting] = useState(false);
+  const [kaomoji, setKaomoji] = useState('Done.');
 
 	useEffect(() => {
 		// Add event listener on component mount
@@ -137,6 +143,10 @@ const StockPage = () => {
 
 	// call backend for predictions on stocks
 	const predictStocks = () => {
+    // set Kaomoji
+    setKaomoji(kaomojiList[Math.floor(Math.random() * kaomojiList.length)])
+    // done setting Kaomoji
+		setPredicting(true)
 		console.log("Predicting stocks...")
 		setIsVisibleWait(true)
 		let path = `/predict/${params.stock}`
@@ -158,6 +168,7 @@ const StockPage = () => {
 			setOrder(data.order)
 			setPValue(data.p_value)
 			setIsStationary(data.stationarity)
+			setPredicting(false);
 		})
 		.catch((error) => {
 			setIsVisibleWait(false)
@@ -197,25 +208,36 @@ const StockPage = () => {
 							</div>
 							{isVisiblePredictChart && (
 								<div>
-									<PredictChart prices={predictedPrices} dates={predictedDates} />
-									<div>
-										<p>
-											The stocks were predicted using ARIMA({order[0]}, {order[1]}, {order[2]}).
-										</p>
-										<p>
-											Test RMSE: {RMSE}
-										</p>
-										<p>
-											{wasDifferenced ? <p>The original data used to fit the model was non-stationary, therefore differencing was applied.</p> 
-											: <p>The Augmented Dickey-Fuller test obtained a p-value of {pValue} {'<'} 0.05, suggesting that the original data used to fit the model is stationary.</p>}
-										</p>
-										<p>
-											{wasDifferenced && <p>
-												{isStationary ? <p>After differencing, the Augmented Dickey-Fuller test obtained a p-value of {pValue} {'<'} 0.05, suggesting that the differenced data used to fit the model is stationary.</p> 
-												: <p>After differencing, the Augmented Dickey-Fuller test obtained a p-value of {pValue} {'>'} 0.05, suggesting that the differenced data used to fit the model is not stationary.</p>}
-											</p>}
-										</p>
-									</div>
+										{!predicting && 
+											<>
+												<PredictChart prices={predictedPrices} dates={predictedDates} />
+												<Box sx={{font: '28px', fontFamily: 'Courier New', fontWeight: '700',}}>
+													<Typewriter options={{
+														delay: 15, cursor: '█',
+													}} onInit={(typewriter) => {
+														typewriter.typeString(
+															`<p>The stocks were predicted using ARIMA(${order[0]}, ${order[1]}, ${order[2]}).</p>`
+														).typeString(
+															`<p>Test RMSE: ${RMSE}.</p>`
+														).typeString(
+															`<p>
+																${wasDifferenced ? `<p>The original data used to fit the model was non-stationary, therefore differencing was applied.</p>`
+																: `<p>The Augmented Dickey-Fuller test obtained a p-value of ${pValue} (less than 5%), suggesting that the original data used to fit the model is stationary.</p>`}
+															</p>`
+														).typeString(
+															`<p>
+																${wasDifferenced ? `<p>
+																	${isStationary ? `<p>After differencing, the Augmented Dickey-Fuller test obtained a p-value of ${pValue} (less than 5%), suggesting that the differenced data used to fit the model is stationary.</p>` 
+																	: `<p>After differencing, the Augmented Dickey-Fuller test obtained a p-value of ${pValue} (greater than 5%), suggesting that the differenced data used to fit the model is not stationary.</p>`}
+															</p>` :
+															``
+														}
+														</p>`
+														).typeString(`${kaomoji}`).start();
+													}}/>
+												</Box>
+											</>
+										}
 								</div>
 							)}
 						</div>
