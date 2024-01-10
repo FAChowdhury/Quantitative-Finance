@@ -36,6 +36,11 @@ const StockPage = () => {
 
 	const [predictedPrices, setPredictedPrices] = useState([])
 	const [predictedDates, setPredictedDates] = useState([])
+	const [RMSE, setRMSE] = useState();
+	const [wasDifferenced, setWasDifferenced] = useState(false);
+	const [order, setOrder] = useState([]);
+	const [pValue, setPValue] = useState();
+	const [isStationary, setIsStationary] = useState();
 
 	const [isIncreasing, setIsIncreasing] = useState(false);
 
@@ -148,6 +153,11 @@ const StockPage = () => {
 			console.log(data)
 			setPredictedPrices(data.Predictions)
 			setPredictedDates(data.Dates)
+			setRMSE(data.RMSE)
+			setWasDifferenced(data.differenced)
+			setOrder(data.order)
+			setPValue(data.p_value)
+			setIsStationary(data.stationarity)
 		})
 		.catch((error) => {
 			setIsVisibleWait(false)
@@ -175,18 +185,38 @@ const StockPage = () => {
 						<div style={left}>
 							<StockPageSummary symbol={params.stock}/>
 							<StockChart labels={labels} data={x} isIncreasing={isIncreasing} />
-							<div onClick={predictStocks} style={{display: 'flex', gap: '20px'}}>
-								<PredictBtn />
+							<div style={{display: 'flex', gap: '20px'}}>
+								<div onClick={predictStocks}>
+									<PredictBtn />
+								</div>
 								{isVisibleWait && (
 									<div>
 										<CircularProgress sx={{marginTop: '20px',}} />
 									</div>
 								)}
 							</div>
-							<div>
-							</div>
 							{isVisiblePredictChart && (
-								<PredictChart prices={predictedPrices} dates={predictedDates} />
+								<div>
+									<PredictChart prices={predictedPrices} dates={predictedDates} />
+									<div>
+										<p>
+											The stocks were predicted using ARIMA({order[0]}, {order[1]}, {order[2]}).
+										</p>
+										<p>
+											Test RMSE: {RMSE}
+										</p>
+										<p>
+											{wasDifferenced ? <p>The original data used to fit the model was non-stationary, therefore differencing was applied.</p> 
+											: <p>The Augmented Dickey-Fuller test obtained a p-value of {pValue} {'<'} 0.05, suggesting that the original data used to fit the model is stationary.</p>}
+										</p>
+										<p>
+											{wasDifferenced && <p>
+												{isStationary ? <p>After differencing, the Augmented Dickey-Fuller test obtained a p-value of {pValue} {'<'} 0.05, suggesting that the differenced data used to fit the model is stationary.</p> 
+												: <p>After differencing, the Augmented Dickey-Fuller test obtained a p-value of {pValue} {'>'} 0.05, suggesting that the differenced data used to fit the model is not stationary.</p>}
+											</p>}
+										</p>
+									</div>
+								</div>
 							)}
 						</div>
 						<div style={right}>

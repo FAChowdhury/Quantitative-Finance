@@ -212,8 +212,8 @@ def predict_stock(symbol: str):
 			predicted_stock_prices.append(last_price)
 		# print(predicted_stock_prices, dates)
 		# print(len(predicted_stock_prices), len(dates))
-		return {"Predictions": predicted_stock_prices, "Dates": dates, "p-value": stationary[2], "RMSE": rmse, "order": stepwise_fit.order, "differenced": differenced, "stationarity": stationary[0]}
+		return {"Predictions": predicted_stock_prices, "Dates": dates, "p_value": stationary[2], "RMSE": rmse, "order": stepwise_fit.order, "differenced": differenced, "stationarity": stationary[0]}
 	else:
 		# print(list(pred), dates)
 		# print(len(pred), len(dates))
-		return {"Predictions": list(pred), "Dates": dates, "p-value": stationary[2], "RMSE": rmse, "order": stepwise_fit.order, "differenced": differenced, "stationarity": stationary[0]}
+		return {"Predictions": list(pred), "Dates": dates, "p_value": stationary[2], "RMSE": rmse, "order": stepwise_fit.order, "differenced": differenced, "stationarity": stationary[0]}
