@@ -233,7 +233,7 @@ const StockPage = () => {
 															``
 														}
 														</p>`
-														).typeString(`${kaomoji}`).start();
+														).typeString(`${kaomoji}.｡oO ( DONE. )`).start();
 													}}/>
 												</Box>
 											</>
