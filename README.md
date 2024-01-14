@@ -27,6 +27,11 @@
 | `/about/<stock>`   |   `GET`   | `str`, information about the stock from wikipedia                                                                       |
 | `/predict/<stock>` |   `GET`   | `{Predictions: [], Dates: [], p_value: float, RMSE: float, order: [], differenced: boolean, stationary: boolean}`       | 
 
+|    Route                 |  Methods  |  Body                                                             | Return                                              |
+|--------------------------|-----------|-------------------------------------------------------------------|-----------------------------------------------------|
+| `/buildEfficientFrontier`|  `POST`   | `{"Tickers": ["AAPL", "GOOG", "ANZ.AX", ...]}`                    | `{MVP: {mean: float, stdev: float, weights: float[]}, list_of_means: float[], list_of_stdev: float[]}|
+| `/buildModernPortfolio`  |  `POST`   | `{mean: float}`                                                   | `{weights: float[], stdev: float}                   |
+
 
 <h3>Frontend</h3>
 <hr>
