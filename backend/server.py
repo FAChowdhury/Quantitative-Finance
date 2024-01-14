@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request, jsonify
 from json import dumps
 from helpers import *
 from portfolio import Init, minVarWeights
@@ -34,6 +34,34 @@ def getStockAbout(stock):
 @app.route("/predict/<stock>", methods=["GET"])
 def getStockPredictions(stock):
     return dumps(predict_stock(stock))
+
+@app.route('/buildEfficientFrontier', methods=['POST'])
+def getEfficientFrontier():
+    try:
+        # Get the JSON data from the request body
+        data = request.get_json()
+
+        # Access the JSON data
+        Tickers = data.get('Tickers')
+
+        # Perform some processing with the JSON data and Return
+        return dumps(Init(Tickers))
+    except Exception as e:
+        return jsonify({'error': str(e)})
+
+@app.route('/buildModernPortfolio', methods=['POST'])
+def getModernPortfolio():
+    try:
+        # Get the JSON data from the request body
+        data = request.get_json()
+
+        # Access the JSON data
+        mean = data.get('mean')
+
+        # Perform some processing with the JSON data and Return
+        return dumps(minVarWeights(mean))
+    except Exception as e:
+        return jsonify({'error': str(e)})
 
 # End of API Routes
 
