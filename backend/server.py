@@ -1,6 +1,7 @@
 from flask import Flask
 from json import dumps
 from helpers import *
+from portfolio import Init, minVarWeights
 
 
 app = Flask(__name__)
