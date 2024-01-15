@@ -117,7 +117,7 @@ export default function ButtonAppBar() {
 					<ListItem button onClick={() => {navigate('/'); setDrawerOpen(false)}}>
 						<ListItemText primary="Home" />
 					</ListItem>
-          <ListItem button onClick={() => {setDrawerOpen(false)}}>
+          <ListItem button onClick={() => {navigate('/portfolio'); setDrawerOpen(false)}}>
             <ListItemText primary="Build a Portfolio" />
           </ListItem>
           <ListItem button onClick={() => {setDrawerOpen(false)}}>

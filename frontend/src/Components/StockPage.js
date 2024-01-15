@@ -7,7 +7,7 @@ import Chart from 'chart.js/auto';
 import StockChart from "./StockChart";
 import AccordianAbout from "./AccordianAbout";
 import StockPageSummary from "./StockPageSummary";
-import PredictBtn from "./PredictBtn";
+import TextBtn from "./TextBtn";
 import CircularProgress from '@mui/material/CircularProgress';
 import PredictChart from "./PredictChart";
 import Typewriter from 'typewriter-effect'
@@ -197,8 +197,8 @@ const StockPage = () => {
 							<StockPageSummary symbol={params.stock}/>
 							<StockChart labels={labels} data={x} isIncreasing={isIncreasing} />
 							<div style={{display: 'flex', gap: '20px'}}>
-								<div onClick={predictStocks}>
-									<PredictBtn />
+								<div onClick={predictStocks} style={{marginTop: '20px', marginLeft: '20px'}}>
+									<TextBtn text={"Predict"} />
 								</div>
 								{isVisibleWait && (
 									<div>

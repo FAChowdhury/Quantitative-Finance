@@ -1,18 +1,30 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Button from '@mui/material/Button';
 
 const purpleColor = {
-      backgroundColor: 'purple',
-      color: 'white', // You might want to adjust the text color for visibility
+  backgroundColor: 'purple',
+  color: 'white', // You might want to adjust the text color for visibility
 };
 
-const marginStyle = {
-    marginTop: '20px',
-    marginLeft: '20px',
-}
+// const marginStyle = {
+//     marginTop: '20px',
+//     marginLeft: '20px',
+// }
 
-const PredictBtn = () => {
+/**
+ * props: {
+ *  text: string
+ * }
+ */
+
+const TextBtn = (props) => {
   const [hovered, setHovered] = React.useState(false);
+
+  const [text, setText] = React.useState("");
+
+  useEffect(() => {
+    setText(props.text)
+  }, [props.text])
 
   const buttonStyle = {
     backgroundColor: hovered ? 'purple' : '#420194',
@@ -30,13 +42,13 @@ const PredictBtn = () => {
   return (
     <Button variant='contained'
       style={buttonStyle}
-      sx={marginStyle}
+      // sx={marginStyle}
       onMouseEnter={handleHover}
       onMouseLeave={handleUnhover}
     >
-      Predict
+      {text}
     </Button>
   );
 };
 
-export default PredictBtn;
+export default TextBtn;
