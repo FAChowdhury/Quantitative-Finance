@@ -9,6 +9,8 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { Line } from 'react-chartjs-2';
 import Chart from 'chart.js/auto';
 import EfficientFrontierChart from "./EfficientFrontierChart";
+import Typewriter from 'typewriter-effect'
+import { Box } from "@mui/material";
 
 const searchStyle = {
   display: 'flex',
@@ -25,6 +27,7 @@ const PortfolioPage = () => {
   const [selectedStocks, setSelectedStocks] = useState([]);
   const [means, setMeans] = useState([]);
   const [stdevs, setStdevs] = useState([]);
+  const [MinVarPort, setMinVarPort] = useState({});
 
   const [loadingEF, setLoadingEF] = useState(false);
   const [displayEFChart, setDisplayEFChart] = useState(false);
@@ -54,6 +57,7 @@ const PortfolioPage = () => {
       // add data to useStates
       setMeans(result.list_of_means)
       setStdevs(result.list_of_stdev)
+      setMinVarPort(result.MVP)
       setLoadingEF(false)
       setDisplayEFChart(true)
     })
@@ -92,7 +96,25 @@ const PortfolioPage = () => {
         )}
       </div>
       {displayEFChart && (
+      <div>
         <EfficientFrontierChart mean={means} stdev={stdevs}/>
+        {/** Add information about min var portfolio + weights */}
+        <Box sx={{font: '28px', fontFamily: 'Courier New', fontWeight: '700', marginLeft: '40px'}}>
+          <Typewriter options={{
+            delay: 35, cursor: '█',
+          }} onInit={(typewriter) => {
+            typewriter.typeString(
+              `<p>MINIMUM VARIANCE PORTFOLIO</p>`
+            ).typeString(
+              `<p>Expected Return: ${MinVarPort.mean}.</p>`
+            ).typeString(
+              `<p>Volatility: ${MinVarPort.stdev}</p>`
+            ).typeString(
+              `Done.`
+            ).start();
+          }}/>
+        </Box>
+      </div>
       )}
     </div>
   )

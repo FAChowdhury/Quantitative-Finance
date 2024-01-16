@@ -20,11 +20,11 @@ def minimumVariancePortfolio(SIGMA_INVERSE, I):
     expected_return = B / A
     stdev = 1 / A
     weights = np.matmul(SIGMA_INVERSE, I) / A
-    return {"mean": expected_return, "stdev": stdev, "weights": weights.tolist()}
+    return {"mean": expected_return, "stdev": stdev**1/2, "weights": weights.tolist()}
 
 def efficientFrontier(mean): 
     variance = (A * mean * mean - 2*B*mean + C) / DELTA
-    return math.sqrt(variance)
+    return variance**1/2
 
 # Helper Functions END
 
