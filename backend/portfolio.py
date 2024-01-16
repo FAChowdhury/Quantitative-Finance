@@ -46,8 +46,12 @@ def Init(Tickers):
     # print("Printing the vector of expected annual returns...")
     # print(Z)
 
-    # Annualized variance-covariance matrix
-    SIGMA = df.cov() * 52
+    '''
+        CHECK TO SEE IF BELOW IS 252 OR SQRT(252)
+    '''
+
+    # Annualized variance-covariance matrix 
+    SIGMA = df.cov() * 252**1/2
     # print("Printing the annual variance-covariance matrix")
     # print(SIGMA)
 
