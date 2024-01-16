@@ -22,8 +22,8 @@ def minimumVariancePortfolio(SIGMA_INVERSE, I):
     weights = np.matmul(SIGMA_INVERSE, I) / A
     return {"mean": expected_return, "stdev": stdev, "weights": weights.tolist()}
 
-def efficientFrontier(mean):
-    variance = (A * mean**2 - 2*B*mean + C) / DELTA
+def efficientFrontier(mean): 
+    variance = (A * mean * mean - 2*B*mean + C) / DELTA
     return math.sqrt(variance)
 
 # Helper Functions END
@@ -89,13 +89,20 @@ def Init(Tickers):
     # Get Efficient Frontier
     # From mean equal to and above the minVarPort, compute stdev.
     startMean = minVarPort['mean']
-    meanDifference = float("{:.1g}".format(startMean)) / 5
+    meanDifference = float("{:.1g}".format(startMean)) / 10
     # print(meanDifference)
 
-    listOfMeans = [startMean]
+    aboveStartMean = startMean
+    listOfMeans = [aboveStartMean]
     for _ in range(50):
-        startMean += meanDifference
-        listOfMeans.append(startMean)
+        aboveStartMean += meanDifference
+        listOfMeans.append(aboveStartMean)
+
+    # belowStartMean = startMean
+    # for _ in range(50):
+    #     belowStartMean -= meanDifference
+    #     listOfMeans.insert(0, belowStartMean)
+        
 
     # print("Printing the list of means")
     # print(listOfMeans)

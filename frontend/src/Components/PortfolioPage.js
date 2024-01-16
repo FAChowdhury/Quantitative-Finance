@@ -6,7 +6,9 @@ import TextField from '@mui/material/TextField';
 import TextBtn from "./TextBtn";
 import { stockList } from "../helpers";
 import CircularProgress from '@mui/material/CircularProgress';
-// import Stack from '@mui/material/Stack';
+import { Line } from 'react-chartjs-2';
+import Chart from 'chart.js/auto';
+import EfficientFrontierChart from "./EfficientFrontierChart";
 
 const searchStyle = {
   display: 'flex',
@@ -21,8 +23,11 @@ const BtnStyle = {
 
 const PortfolioPage = () => {
   const [selectedStocks, setSelectedStocks] = useState([]);
+  const [means, setMeans] = useState([]);
+  const [stdevs, setStdevs] = useState([]);
 
   const [loadingEF, setLoadingEF] = useState(false);
+  const [displayEFChart, setDisplayEFChart] = useState(false);
 
   useEffect(() => {
     stockList.sort((a,b) => a.symbol.localeCompare(b.symbol))
@@ -30,6 +35,7 @@ const PortfolioPage = () => {
 
   const handleCreatePortfolio = () => {
     setLoadingEF(true)
+    setDisplayEFChart(false)
     console.log(selectedStocks)
     let stocks = selectedStocks.map((value) => value.symbol)
     console.log(stocks)
@@ -45,7 +51,11 @@ const PortfolioPage = () => {
     .then(response => response.json())
     .then(result => {
       console.log('POST request successful:', result);
+      // add data to useStates
+      setMeans(result.list_of_means)
+      setStdevs(result.list_of_stdev)
       setLoadingEF(false)
+      setDisplayEFChart(true)
     })
     .catch(error => {
       console.error('Error making POST request:', error);
@@ -63,7 +73,6 @@ const PortfolioPage = () => {
           options={stockList}
           onChange={(event, values) => {setSelectedStocks(values)}}
           getOptionLabel={(option) => option.symbol}
-          // defaultValue={[top100Films[13]]}
           filterSelectedOptions
           renderInput={(params) => (
             <TextField
@@ -82,6 +91,9 @@ const PortfolioPage = () => {
           <CircularProgress sx={{marginLeft: '20px'}}/>
         )}
       </div>
+      {displayEFChart && (
+        <EfficientFrontierChart mean={means} stdev={stdevs}/>
+      )}
     </div>
   )
 }
