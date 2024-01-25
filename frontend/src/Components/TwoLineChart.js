@@ -45,9 +45,7 @@ const TwoLineChart = (props) => {
   };
 
   return (
-    <div>
-      <Line data={data} options={options} />
-    </div>
+    <Line style={{maxWidth: "800px"}} data={data} options={options} />
   );
 };
 
