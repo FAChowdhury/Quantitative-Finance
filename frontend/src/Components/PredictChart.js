@@ -24,20 +24,20 @@ const options = {
 const PredictChart = (props) => {
   const params = useParams();
   return (
-      <Line style={{maxWidth: "800px"}} data={
-        {
-          labels: props.dates,
-          datasets: [
-            {
-            label: `Predicted prices of ${params.stock.toUpperCase()} over the coming fortnight`,
-            data: props.prices, 
-            fill: false,
-            borderColor: 'purple',
-            tension: 0.1,
-            },
-          ],
-        }
-      } options={options}/>
+    <Line style={{maxWidth: "800px"}} data={
+      {
+        labels: props.dates,
+        datasets: [
+          {
+          label: `Predicted prices of ${params.stock.toUpperCase()} over the coming fortnight`,
+          data: props.prices, 
+          fill: false,
+          borderColor: 'purple',
+          tension: 0.1,
+          },
+        ],
+      }
+    } options={options}/>
   );
 }
 

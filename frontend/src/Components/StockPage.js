@@ -11,6 +11,7 @@ import TextBtn from "./TextBtn";
 import CircularProgress from '@mui/material/CircularProgress';
 import PredictChart from "./PredictChart";
 import Typewriter from 'typewriter-effect'
+import TwoLineChart from "./TwoLineChart";
 
 const left = {
 	flex: '5',
@@ -19,8 +20,6 @@ const left = {
 const right = {
 	flex: '3',
 }
-
-const kaomojiList = ['♡⸜(˶˃ ᵕ ˂˶)⸝♡', '( ˶ˆᗜˆ˵ )', '!!(●ω●;)', '𓁹‿𓁹', '"(ó﹏ò｡)', '(╥﹏╥)', '( • ᴗ - ) ✧', '༼ つ ◕_◕ ༽つ <3', '( ｡ •̀ ᴖ •́ ｡)', 'ᕙ(  •̀ ᗜ •́  )ᕗ']
 
 const StockPage = () => {
 	const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -50,8 +49,11 @@ const StockPage = () => {
 	const [isVisibleWait, setIsVisibleWait] = useState(false);
 	const [isVisiblePredictChart, setIsVisiblePredictChart] = useState(false);
 
+  const [testData, setTestData] = useState([])
+  const [testPredictions, setTestPredictions] = useState([])
+  const [testDates, setTestDates] = useState([])
+
 	const [predicting, setPredicting] = useState(false);
-  const [kaomoji, setKaomoji] = useState('Done.');
 
 	useEffect(() => {
 		// Add event listener on component mount
@@ -144,7 +146,6 @@ const StockPage = () => {
 	// call backend for predictions on stocks
 	const predictStocks = () => {
     // set Kaomoji
-    setKaomoji(kaomojiList[Math.floor(Math.random() * kaomojiList.length)])
     // done setting Kaomoji
 		setPredicting(true)
 		console.log("Predicting stocks...")
@@ -169,6 +170,9 @@ const StockPage = () => {
 			setPValue(data.p_value)
 			setIsStationary(data.stationarity)
 			setPredicting(false);
+      setTestData(data.TestData)
+      setTestDates(data.TestDates)
+      setTestPredictions(data.TestPredictions)
 		})
 		.catch((error) => {
 			setIsVisibleWait(false)
@@ -211,6 +215,10 @@ const StockPage = () => {
 										{!predicting && 
 											<>
 												<PredictChart prices={predictedPrices} dates={predictedDates} />
+                        <div style={{display: 'flex', justifyContent: 'center'}}>
+                          <Typography variant="h3" sx={{marginTop: '40px'}}>Model Evaluation</Typography>
+                        </div>
+                        <TwoLineChart testPrices={testData} predictionPrices={testPredictions} dates={testDates} />
 												<Box sx={{font: '28px', fontFamily: 'Courier New', fontWeight: '700',}}>
 													<Typewriter options={{
 														delay: 15, cursor: '█',
@@ -233,7 +241,7 @@ const StockPage = () => {
 															``
 														}
 														</p>`
-														).typeString(`${kaomoji}.｡oO ( DONE. )`).start();
+														).typeString(`Complete.`).start();
 													}}/>
 												</Box>
 											</>
