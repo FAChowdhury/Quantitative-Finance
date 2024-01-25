@@ -17,6 +17,7 @@
 <p>Then run 'python3 server.py' in the backend virtual environment</p>
 <h4>API</h4>
 <h5>GET</h5>
+
 |    Route           |  Methods  |  Return                                                                                                                 |
 |--------------------|-----------|-------------------------------------------------------------------------------------------------------------------------|
 | `/summary/<stock>` |   `GET`   | `{Stock: str, Last_Price: int, Change: float, Percentage_Change: float}`                                                |
@@ -26,7 +27,9 @@
 | `/name/<stock>`    |   `GET`   | `name: str`                                                                                                             |
 | `/about/<stock>`   |   `GET`   | `str`, information about the stock from wikipedia                                                                       |
 | `/predict/<stock>` |   `GET`   | `{Predictions: [], Dates: [], p_value: float, RMSE: float, order: [], differenced: boolean, stationary: boolean, TestPredictions: [], TestData: [], TestDates: []}`       | 
+
 <h5>POST</h5>
+
 |    Route                 |  Methods  |  Body                                                             | Return                                              |
 |--------------------------|-----------|-------------------------------------------------------------------|-----------------------------------------------------|
 | `/buildEfficientFrontier`|  `POST`   | `{Tickers: ["AAPL", "GOOG", "ANZ.AX", ...]}`                      | `{MVP: {mean: float, stdev: float, weights: float[]}, list_of_means: float[], list_of_stdev: float[]}`|
