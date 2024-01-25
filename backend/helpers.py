@@ -2,6 +2,7 @@ import yfinance as yf
 import requests
 import wikipedia
 from datetime import datetime, timedelta
+from pandas.tseries.offsets import BDay
 from news_store import news_store
 from statsmodels.tsa.stattools import adfuller
 from statsmodels.tsa.arima.model import ARIMA
@@ -184,6 +185,20 @@ def predict_stock(symbol: str):
 	start = len(train)
 	end = len(train) + len(test) - 1
 	pred = model.predict(start = start, end = end, typ='levels')
+
+	# Get today's date
+	end_date = datetime.now()
+
+	# Calculate the start date by subtracting 60 business days from the current date
+	start_date = end_date - 60 * BDay()
+
+	# Generate the business days date range
+	business_days_range = pd.date_range(start=start_date, end=end_date - BDay(), freq=BDay())
+
+	testData = list(test)
+	testPrediction = list(pred)
+	testDates = list(business_days_range.strftime('%d-%m-%Y'))
+
 	pred.index = data.index[start:end+1]
 	rmse = sqrt(mean_squared_error(pred, test))
 	# print(rmse)
@@ -204,15 +219,30 @@ def predict_stock(symbol: str):
 
 	# Pass the list below as the forcasted stock prices
 	if differenced:
+		# Future Stock Prediction
 		predicted_stock_prices = []
 		last_price = historical_data['Close'].iloc[-1]
 		for price in pred:
 			last_price += price
 			predicted_stock_prices.append(last_price)
-		# print(predicted_stock_prices, dates)
-		# print(len(predicted_stock_prices), len(dates))
-		return {"Predictions": predicted_stock_prices, "Dates": dates, "p_value": stationary[2], "RMSE": rmse, "order": stepwise_fit.order, "differenced": differenced, "stationarity": stationary[0]}
+
+		# Test Data Stock Prediction
+		test_predicted_stock_prices = []
+		test_last_price = historical_data['Close'].iloc[-61]
+		for price in testPrediction:
+			test_last_price += price
+			test_predicted_stock_prices.append(test_last_price)
+
+		# Test Data 
+		test_data = []
+		test_last_price = historical_data['Close'].iloc[-61]
+		for price in testData:
+			test_last_price += price
+			test_data.append(test_last_price)
+		return {"Predictions": predicted_stock_prices, "Dates": dates, "p_value": stationary[2], "RMSE": rmse, "order": stepwise_fit.order, "differenced": differenced, "stationarity": stationary[0],
+				"TestPredictions": test_predicted_stock_prices, "TestData": test_data, "TestDates": testDates,
+		  		}
 	else:
-		# print(list(pred), dates)
-		# print(len(pred), len(dates))
-		return {"Predictions": list(pred), "Dates": dates, "p_value": stationary[2], "RMSE": rmse, "order": stepwise_fit.order, "differenced": differenced, "stationarity": stationary[0]}
+		return {"Predictions": list(pred), "Dates": dates, "p_value": stationary[2], "RMSE": rmse, "order": stepwise_fit.order, "differenced": differenced, "stationarity": stationary[0],
+		  		"TestPredictions": testPrediction, "TestData": testData, "TestDates": testDates,
+				}
