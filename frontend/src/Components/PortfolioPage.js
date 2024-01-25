@@ -97,9 +97,11 @@ const PortfolioPage = () => {
       </div>
       {displayEFChart && (
       <div>
-        <EfficientFrontierChart mean={means} stdev={stdevs}/>
+        <div style={{display: 'flex', justifyContent: 'center'}}>
+          <EfficientFrontierChart mean={means} stdev={stdevs}/>
+        </div>
         {/** Add information about min var portfolio + weights */}
-        <Box sx={{font: '28px', fontFamily: 'Courier New', fontWeight: '700', marginLeft: '40px'}}>
+        {/* <Box sx={{font: '28px', fontFamily: 'Courier New', fontWeight: '700', marginLeft: '40px'}}>
           <Typewriter options={{
             delay: 35, cursor: '█',
           }} onInit={(typewriter) => {
@@ -113,7 +115,7 @@ const PortfolioPage = () => {
               `Done.`
             ).start();
           }}/>
-        </Box>
+        </Box> */}
       </div>
       )}
     </div>

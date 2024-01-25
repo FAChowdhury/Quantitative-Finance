@@ -32,20 +32,20 @@ const options = {
 
 const EfficientFrontierChart = (props) => {
   return (
-      <Line style={{marginTop: '40px'}} data={
-        {
-          labels: props.stdev,
-          datasets: [
-            {
-            label: `Expected return of portfolios in the Efficient Frontier`,
-            data: props.mean, 
-            fill: false,
-            borderColor: 'green',
-            tension: 0.1,
-            },
-          ],
-        }
-      } options={options}/>
+    <Line style={{marginTop: '40px', maxHeight: '600px', maxWidth:'1000px'}} data={
+      {
+        labels: props.stdev,
+        datasets: [
+          {
+          label: `Expected return of portfolios in the Efficient Frontier`,
+          data: props.mean, 
+          fill: false,
+          borderColor: 'green',
+          tension: 0.1,
+          },
+        ],
+      }
+    } options={options}/>
   );
 }
 
