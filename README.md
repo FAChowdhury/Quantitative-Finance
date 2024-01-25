@@ -16,6 +16,7 @@
 <p>Run 'pip install -r requirements. txt'</p>
 <p>Then run 'python3 server.py' in the backend virtual environment</p>
 <h4>API</h4>
+
 <h5>GET</h5>
 
 |    Route           |  Methods  |  Return                                                                                                                 |
