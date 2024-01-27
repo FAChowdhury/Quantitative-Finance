@@ -10,7 +10,8 @@ import { Line } from 'react-chartjs-2';
 import Chart from 'chart.js/auto';
 import EfficientFrontierChart from "./EfficientFrontierChart";
 import Typewriter from 'typewriter-effect'
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
+import GenerateWeights from "./GenerateWeights";
 
 const searchStyle = {
   display: 'flex',
@@ -97,8 +98,12 @@ const PortfolioPage = () => {
       </div>
       {displayEFChart && (
       <div>
-        <div style={{display: 'flex', justifyContent: 'center'}}>
+        <div style={{display: 'flex', justifyContent: 'center', flexDirection: 'column', alignContent: 'center', flexWrap: 'wrap'}}>
           <EfficientFrontierChart mean={means} stdev={stdevs}/>
+          <Typography style={{marginTop: '40px', display: 'flex', justifyContent: 'center'}}>
+            Enter your desired return from this selection of stocks:
+          </Typography>
+          <GenerateWeights min={MinVarPort.mean}/>
         </div>
         {/** Add information about min var portfolio + weights */}
         {/* <Box sx={{font: '28px', fontFamily: 'Courier New', fontWeight: '700', marginLeft: '40px'}}>
