@@ -25,6 +25,7 @@ const BtnStyle = {
 }
 
 const PortfolioPage = () => {
+  const [stocksList, setStocksList] = useState([]);
   const [selectedStocks, setSelectedStocks] = useState([]);
   const [means, setMeans] = useState([]);
   const [stdevs, setStdevs] = useState([]);
@@ -42,6 +43,7 @@ const PortfolioPage = () => {
     setDisplayEFChart(false)
     console.log(selectedStocks)
     let stocks = selectedStocks.map((value) => value.symbol)
+    setStocksList(stocks)
     console.log(stocks)
     // call backend to create efficient portfolio
     let path = '/buildEfficientFrontier';
@@ -71,58 +73,46 @@ const PortfolioPage = () => {
   return(
     <div>
       <ButtonAppBar />
-      <div style={searchStyle}>
-        <Autocomplete sx={{width: '80%',}}
-          multiple
-          id="tags-outlined"
-          options={stockList}
-          onChange={(event, values) => {setSelectedStocks(values)}}
-          getOptionLabel={(option) => option.symbol}
-          filterSelectedOptions
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              label="Add symbol"
-              placeholder="AAPL, TSLA, GOOG..."
-            />
-          )}
-        />
-      </div>
-      <div style={BtnStyle}>
-        <div onClick={handleCreatePortfolio}>
-          <TextBtn text={"Create Portfolio"}/>
+      <div style={{display: 'flex', justifyContent: 'center', flexDirection: 'column', alignContent: 'center'}}>
+        <div style={searchStyle}>
+          <Autocomplete sx={{width: '80%',}}
+            multiple
+            id="tags-outlined"
+            options={stockList}
+            onChange={(event, values) => {setSelectedStocks(values)}}
+            getOptionLabel={(option) => option.symbol}
+            filterSelectedOptions
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Add symbol"
+                placeholder="AAPL, TSLA, GOOG..."
+              />
+            )}
+          />
         </div>
-        {loadingEF && (
-          <CircularProgress sx={{marginLeft: '20px'}}/>
+        <div style={BtnStyle}>
+          <div onClick={handleCreatePortfolio}>
+            <TextBtn text={"Create Portfolio"}/>
+          </div>
+          {loadingEF && (
+            <CircularProgress sx={{marginLeft: '20px'}}/>
+          )}
+        </div>
+        {displayEFChart && (
+        <div>
+          <div style={{display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center'}}>
+            <EfficientFrontierChart mean={means} stdev={stdevs}/>
+            <div style={{width: '100%', display: 'flex', justifyContent: 'center', flexDirection: 'column'}}>
+              <Typography style={{marginTop: '40px', display: 'flex', justifyContent: 'center'}}>
+                Enter your desired return from this selection of stocks:
+              </Typography>
+              <GenerateWeights min={MinVarPort.mean} stocksList={stocksList}/>
+            </div>
+          </div>
+        </div>
         )}
       </div>
-      {displayEFChart && (
-      <div>
-        <div style={{display: 'flex', justifyContent: 'center', flexDirection: 'column', alignContent: 'center', flexWrap: 'wrap'}}>
-          <EfficientFrontierChart mean={means} stdev={stdevs}/>
-          <Typography style={{marginTop: '40px', display: 'flex', justifyContent: 'center'}}>
-            Enter your desired return from this selection of stocks:
-          </Typography>
-          <GenerateWeights min={MinVarPort.mean}/>
-        </div>
-        {/** Add information about min var portfolio + weights */}
-        {/* <Box sx={{font: '28px', fontFamily: 'Courier New', fontWeight: '700', marginLeft: '40px'}}>
-          <Typewriter options={{
-            delay: 35, cursor: '█',
-          }} onInit={(typewriter) => {
-            typewriter.typeString(
-              `<p>MINIMUM VARIANCE PORTFOLIO</p>`
-            ).typeString(
-              `<p>Expected Return: ${MinVarPort.mean}.</p>`
-            ).typeString(
-              `<p>Volatility: ${MinVarPort.stdev}</p>`
-            ).typeString(
-              `Done.`
-            ).start();
-          }}/>
-        </Box> */}
-      </div>
-      )}
     </div>
   )
 }
