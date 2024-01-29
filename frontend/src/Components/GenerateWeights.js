@@ -11,14 +11,13 @@ import Typewriter from 'typewriter-effect'
  * } 
  */
 function GenerateWeights(props) {
-  const [inputValue, setInputValue] = useState();
+  const [inputValue, setInputValue] = useState(props.min);
   const [expectedValue, setExpectedValue] = useState(props.min);
   const [canDoBetter, setCanDoBetter] = useState(false)
   const [visibleWeights, setVisibleWeights] = useState(false);
 
   const [weights, setWeights] = useState([]);
   const [stdev, setStdev] = useState();
-  const [refresh, setRefresh] = useState(false);
   const handleInput = (event) => {
     // Allow only numeric input (including decimals)
     const regex = /^[0-9]*\.?[0-9]*$/;
